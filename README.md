@@ -15,7 +15,7 @@ Free Paint 1.0 is a small mouse-driven paint program I wrote in October 1995 in 
 
 The development snapshots I kept show the whole program written in one sitting on October 20, 1995. At 02:48 I was reading Borland's sample code for the graphics mode. At 03:57 I had a first test that put one green pixel wherever the mouse was while a button was held. By half past six it had the control bar with its color strip, by a quarter past nine it could save a picture, by eleven it was the editor it still is, and at 11:51 I wrote the viewer.
 
-Thirty years later, in October 2026, I brought it back to life in DOSBox Staging on Windows. It still works, saved pictures included.
+Thirty-one years later, in October 2026, I brought it back to life in DOSBox Staging on Windows. It still works, saved pictures included.
 
 ## What it does
 
@@ -76,7 +76,7 @@ I build and run Freepnt using [DOSBox Staging](https://www.dosbox-staging.org/) 
 4. Open `SRC\FREEPNT.PAS` or `SRC\FREEPNTV.PAS`
 5. Press **Alt+F9** to compile, **Ctrl+F9** to run
 
-To build from the command line instead, run `python scripts/build.py`. It compiles both programs in DOSBox Staging without opening the IDE, and checks that each result is byte-identical to the EXE in the v1.0.0 release. Set `DOSBOX` to the DOSBox Staging executable and `DOS_C_DIR` to the folder that DOSBox mounts as `C:`, with Turbo Pascal installed in it. The script looks for the compiler at `C:\BP\BIN\TPC.EXE` and for the graphics driver at `C:\BP\BGI\EGAVGA.BGI`; set `TPC` and `BGI` if yours are elsewhere, for example `C:\TP\BIN\TPC.EXE`. With `--web`, it also rebuilds the browser version in `web/`.
+To build from the command line instead, run `python scripts/build.py`. It compiles both programs in DOSBox Staging without opening the IDE, and checks that each result is byte-identical to the EXE in the v1.0.0 release. Set `DOSBOX` to the DOSBox Staging executable and `DOS_C_DIR` to the folder that DOSBox mounts as `C:`, with Turbo Pascal installed in it. The script looks for the compiler at `C:\BP\BIN\TPC.EXE` and for the graphics driver at `C:\BP\BGI\EGAVGA.BGI`; set `TPC` and `BGI` if yours are elsewhere, for example `C:\TP\BIN\TPC.EXE`. With `--web`, it also rebuilds the browser version in `web/`, and with `--package`, it writes the release ZIP to `dist/`.
 
 ## Source layout
 
@@ -94,13 +94,15 @@ UNITS/
   CRTKEYB.PAS           keyboard input with extended-key handling
 dist/
   FIREWORK.FE1          the sample picture, for the browser version and the ZIP
+  README.TXT            readme for the ZIP
+  LICENSE.TXT           license for the ZIP
 web/
   index.html            browser version, running the DOS programs in js-dos
   freepnt.jsdos         js-dos bundle with both EXEs, the driver and the sample, written by build.py
   manifest.webmanifest  web app manifest, for installing it as an app
   icons/                favicon and app icons
 scripts/
-  build.py              build and browser bundle
+  build.py              build, browser bundle and release ZIP
 ```
 
 The six units are small and reusable on their own. `STDCHAR.PAS` and `CRTKEYB.PAS` are the same files as in [Toggtime](https://github.com/TheHelloWorldWriter/Toggtime), and they may eventually move into a shared Hello World Writer Pascal library.

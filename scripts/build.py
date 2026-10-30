@@ -2,7 +2,7 @@
 
 The compiler runs inside a DOSBox Staging that starts, compiles and exits on
 its own, working on a temporary copy of the source so the repo stays clean.
-Run from anywhere: python scripts/build.py [--web]
+Run from anywhere: python scripts/build.py [--web] [--package]
 
 Environment variables:
   DOSBOX      the DOSBox Staging executable
@@ -25,8 +25,12 @@ from pathlib import Path, PureWindowsPath
 REPO_DIR = Path(__file__).resolve().parent.parent
 SRC_DIR = REPO_DIR / "SRC"
 UNITS_DIR = REPO_DIR / "UNITS"
-SAMPLE = REPO_DIR / "dist" / "FIREWORK.FE1"
+DIST_DIR = REPO_DIR / "dist"
+SAMPLE = DIST_DIR / "FIREWORK.FE1"
 WEB_BUNDLE = REPO_DIR / "web" / "freepnt.jsdos"
+
+VERSION = "1.0.0"
+PACKAGE = DIST_DIR / f"freepnt-{VERSION}-dos.zip"
 
 DEFAULT_TPC = r"C:\BP\BIN\TPC.EXE"
 DEFAULT_BGI = r"C:\BP\BGI\EGAVGA.BGI"
@@ -49,9 +53,10 @@ freepnt firework
 echo Type FREEPNT FIREWORK to paint again, or FREEPNTV FIREWORK to view it.
 """
 
-# A fixed date keeps the bundle byte-identical across builds; it is the date
-# the help screens give
+# Fixed dates keep the bundle and the ZIP byte-identical across builds; the
+# bundle's is the date the help screens give, the ZIP's the v1.0.0 release date
 BUNDLE_DATE = (1995, 10, 20, 0, 0, 0)
+PACKAGE_DATE = (2026, 10, 30, 0, 0, 0)
 
 # The programs, and the SHA-256 of each EXE as the current source builds it; a
 # change here means the program itself changed
@@ -149,15 +154,31 @@ def write_bundle(exes: dict[str, bytes], bgi: bytes) -> None:
     print(f"Wrote {WEB_BUNDLE.relative_to(REPO_DIR).as_posix()}")
 
 
+def write_package(exes: dict[str, bytes], bgi: bytes) -> None:
+    with zipfile.ZipFile(PACKAGE, "w") as archive:
+        for name, exe in exes.items():
+            add_file(archive, f"{name}.EXE", exe, PACKAGE_DATE)
+        add_file(archive, "EGAVGA.BGI", bgi, PACKAGE_DATE)
+        add_file(archive, SAMPLE.name, SAMPLE.read_bytes(), PACKAGE_DATE)
+        for name in ("README.TXT", "LICENSE.TXT"):
+            # DOS reads these, so they get CRLF whatever the checkout has
+            text = (DIST_DIR / name).read_bytes().replace(b"\r\n", b"\n")
+            add_file(archive, name, text.replace(b"\n", b"\r\n"), PACKAGE_DATE)
+    print(f"Wrote {PACKAGE.relative_to(REPO_DIR).as_posix()}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument(
         "--web", action="store_true", help="also write the js-dos bundle for web/"
     )
+    parser.add_argument(
+        "--package", action="store_true", help="also write the release ZIP in dist/"
+    )
     args = parser.parse_args()
 
     # Checked first, so a wrong driver fails before the slow compile
-    bgi = read_bgi() if args.web else b""
+    bgi = read_bgi() if args.web or args.package else b""
 
     with tempfile.TemporaryDirectory() as temp:
         exes = compile_exes(Path(temp) / "build")
@@ -172,6 +193,8 @@ def main() -> None:
 
     if args.web:
         write_bundle(exes, bgi)
+    if args.package:
+        write_package(exes, bgi)
 
 
 if __name__ == "__main__":

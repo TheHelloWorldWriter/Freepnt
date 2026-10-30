@@ -1,0 +1,23 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# The Pascal sources are code page 437 text with CRLF line endings; leave their
+# encoding, indentation and final newline as they are
+[{SRC,UNITS}/**]
+charset = unset
+end_of_line = crlf
+indent_style = unset
+indent_size = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+
+# The release texts are plain ASCII read under DOS
+[dist/*.TXT]
+end_of_line = crlf

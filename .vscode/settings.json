@@ -1,0 +1,16 @@
+{
+  "files.eol": "\n",
+  "editor.tabSize": 2,
+  "editor.rulers": [
+    80,
+    100,
+    120
+  ],
+  "files.associations": {
+    "*.PAS": "pascal"
+  },
+  "[pascal]": {
+    "files.encoding": "cp437",
+    "files.eol": "\r\n"
+  }
+}

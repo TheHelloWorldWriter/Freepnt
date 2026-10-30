@@ -1,0 +1,11 @@
+# Default: store text files as LF in the repo and check them out as LF
+* text=auto eol=lf
+
+# DOS-side files keep CRLF, as Turbo Pascal 7 and other DOS tools expect
+SRC/** text eol=crlf
+UNITS/** text eol=crlf
+dist/*.TXT text eol=crlf
+
+*.EXE binary
+*.ZIP binary
+*.jsdos binary

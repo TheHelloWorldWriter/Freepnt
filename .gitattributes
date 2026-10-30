@@ -9,3 +9,5 @@ dist/*.TXT text eol=crlf
 *.EXE binary
 *.ZIP binary
 *.jsdos binary
+*.FE1 binary
+*.BGI binary

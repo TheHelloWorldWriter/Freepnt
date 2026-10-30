@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Freepnt</title>
+  <meta name="description" content="Free Paint 1.0, a 1995 Turbo Pascal paint program for 640x480 VGA with 16 colors, running in your browser.">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/js-dos@8.5.3/dist/js-dos.css">
+  <script src="https://cdn.jsdelivr.net/npm/js-dos@8.5.3/dist/js-dos.js"></script>
+  <style>
+    html, body, #dos {
+      height: 100%;
+      margin: 0;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <div id="dos"></div>
+  <script>
+    Dos(document.getElementById("dos"), {
+      url: "freepnt.jsdos",
+      pathPrefix: "https://cdn.jsdelivr.net/npm/js-dos@8.5.3/dist/emulators/",
+      kiosk: true,
+      autoStart: true,
+      renderAspect: "4/3",
+    });
+  </script>
+</body>
+</html>
